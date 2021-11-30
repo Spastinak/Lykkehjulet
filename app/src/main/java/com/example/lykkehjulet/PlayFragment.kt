@@ -25,9 +25,6 @@ class PlayFragment : Fragment() {
 
     private val gameManager = GameManager()
 
-//    private lateinit var wordTextView: TextView
-//    private lateinit var letterUsedTextView: TextView
-//    private lateinit var lettersLayout: ConstraintLayout
 
     private var _binding : FragmentPlayBinding? = null
     private val binding get() = _binding!!
@@ -49,6 +46,7 @@ class PlayFragment : Fragment() {
         val gameState = gameManager.startNewGame()
         notifyChange(gameState)
 
+
         // used for the keyboard
         binding.lettersLayout.children.forEach { letterView ->
             if (letterView is TextView) {
@@ -59,7 +57,6 @@ class PlayFragment : Fragment() {
                 }
             }
         }
-
 
         binding.spinButton.setOnClickListener {
             gameManager.spinWheel()
@@ -80,6 +77,9 @@ class PlayFragment : Fragment() {
             is GameState.Running -> {
                 binding.wordTextview.text = gameState.underscoreWord // TODO make this work
                 binding.letterUsedTextView.text = "letters used: ${gameState.letterUsed}" // TODO make this work
+                binding.score.text = "Score: ${gameManager.score}"
+                binding.lives.text = "Lives: ${gameManager.getLives()}"
+                binding.result.text = gameManager.resultMSG
                 //imageView.setImageDrawable(ContextCompat.getDrawable(this, gameState.drawable)) maybe this is needed
             }
             is GameState.Won -> showGameWon(gameState.wordToGuess) // TODO make this work
@@ -94,14 +94,6 @@ class PlayFragment : Fragment() {
     private fun showGameWon(wordToGuess: String) {
         view?.let { Navigation.findNavController(it).navigate(R.id.action_playFragment_to_wonFragment) }
     }
-
-//    fun startNewGame() {
-//        val gameState = gameManager.startNewGame()
-//        // TODO properly need to add more functionalaty to this function
-//
-//        notifyChange(gameState)
-//    }
-
 
 
 
