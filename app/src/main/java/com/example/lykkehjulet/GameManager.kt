@@ -14,6 +14,8 @@ class GameManager {
     private var lives: Int = 5
     var score: Int = 0
     var keyboard: Boolean = false
+    private var scoreMultiplyer: Int = 0
+
 
 
     private var _binding : FragmentPlayBinding? = null
@@ -63,6 +65,7 @@ class GameManager {
         indexes.forEach {index ->
             val sb = StringBuilder(finalUnderscoreWord).also { it.setCharAt(index, letter) }
             finalUnderscoreWord = sb.toString()
+            score += scoreMultiplyer
         }
 
         if (indexes.isEmpty()) {
@@ -70,6 +73,7 @@ class GameManager {
         }
 
         underscoreWord = finalUnderscoreWord
+        scoreMultiplyer = 0
 
         return getGameState()
     }
@@ -89,6 +93,9 @@ class GameManager {
 
     fun spinWheel() {
         val wheelIndex = Random.nextInt(0,7)
+        if (wheelIndex >= 3) {
+            keyboard = true
+        }
         when (wheelIndex) {
             0 -> {
                 lives++
@@ -103,23 +110,23 @@ class GameManager {
                 resultMSG = "Bankrupt"
             }
             3 -> {
-                score += 25
+                scoreMultiplyer += 25
                 resultMSG = "25"
             }
             4 -> {
-                score += 50
+                scoreMultiplyer += 50
                 resultMSG = "50"
             }
             5 -> {
-                score += 100
+                scoreMultiplyer += 100
                 resultMSG = "100"
             }
             6 -> {
-                score += 1000
+                scoreMultiplyer += 1000
                 resultMSG = "1000"
             }
             7 -> {
-                score += 1500
+                scoreMultiplyer += 1500
                 resultMSG = "1500"
             }
         }

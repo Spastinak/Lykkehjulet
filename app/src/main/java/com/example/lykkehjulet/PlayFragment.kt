@@ -52,6 +52,7 @@ class PlayFragment : Fragment() {
             if (letterView is TextView) {
                 letterView.setOnClickListener {
                     val gameState = gameManager.play((letterView).text[0])
+                    gameManager.keyboard = false
                     notifyChange(gameState)
                     letterView.visibility = View.GONE
                 }
@@ -80,7 +81,13 @@ class PlayFragment : Fragment() {
                 binding.score.text = "Score: ${gameManager.score}"
                 binding.lives.text = "Lives: ${gameManager.getLives()}"
                 binding.result.text = gameManager.resultMSG
-                //imageView.setImageDrawable(ContextCompat.getDrawable(this, gameState.drawable)) maybe this is needed
+                if (gameManager.keyboard) {
+                    binding.lettersLayout.visibility = View.VISIBLE
+                    binding.spinButton.visibility = View.INVISIBLE
+                } else {
+                    binding.lettersLayout.visibility = View.INVISIBLE
+                    binding.spinButton.visibility = View.VISIBLE
+                }
             }
             is GameState.Won -> showGameWon(gameState.wordToGuess) // TODO make this work
         }
@@ -88,7 +95,6 @@ class PlayFragment : Fragment() {
 
 
     private fun showGameLost(wordToGuess: String) {
-        //Navigation.findNavController(view).navigate(R.id.action_playFragment_to_lostFragment)
         view?.let { Navigation.findNavController(it).navigate(R.id.action_playFragment_to_lostFragment) }
     }
     private fun showGameWon(wordToGuess: String) {
