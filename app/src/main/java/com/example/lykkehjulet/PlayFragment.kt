@@ -11,6 +11,7 @@ import android.widget.TextView
 
 import androidx.core.view.children
 import androidx.navigation.Navigation
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.lykkehjulet.databinding.FragmentPlayBinding
 import kotlin.random.Random
 import java.util.*
@@ -29,6 +30,8 @@ class PlayFragment : Fragment() {
     private var _binding : FragmentPlayBinding? = null
     private val binding get() = _binding!!
 
+    lateinit var livesAdapter: LivesAdapter
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -41,10 +44,20 @@ class PlayFragment : Fragment() {
 
 
 
+        livesAdapter = LivesAdapter(gameManager.getLivesL())
+        binding.recyclerViewLives.adapter = livesAdapter
+        val layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        binding.recyclerViewLives.layoutManager = layoutManager
+
 
 
         val gameState = gameManager.startNewGame()
         notifyChange(gameState)
+
+
+
+        binding.categoryTextView.text = gameManager.category.name
+
 
 
         // used for the keyboard
@@ -81,6 +94,7 @@ class PlayFragment : Fragment() {
                 binding.score.text = "Score: ${gameManager.score}"
                 binding.lives.text = "Lives: ${gameManager.getLives()}"
                 binding.result.text = gameManager.resultMSG
+                livesAdapter.notifyDataSetChanged()
                 if (gameManager.keyboard) {
                     binding.lettersLayout.visibility = View.VISIBLE
                     binding.spinButton.visibility = View.INVISIBLE

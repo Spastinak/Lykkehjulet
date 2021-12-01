@@ -9,3 +9,10 @@ object GameConstants {
         // TODO add more words to the game
     )
 }
+
+enum class Category(val words: List<String>){
+    Countries(listOf("Denmark", "Norway")),
+    Bodyparts(listOf("Head","Arm"))
+}
+
+//COUNTRIES
