@@ -22,12 +22,6 @@ class GameManager {
 
 
 
-    private var _binding : FragmentPlayBinding? = null
-    private val binding get() = _binding!!
-
-    fun getLives(): Int {
-        return lives
-    }
 
     fun startNewGame(): GameState{
         lettersUsed = ""
@@ -88,7 +82,7 @@ class GameManager {
 
     fun getGameState(): GameState{
         if (underscoreWord.equals(wordToGuess, true)){
-            return GameState.Won(wordToGuess)
+            return GameState.Won(score)
         }
 
         if (lives == 0) {
@@ -98,7 +92,7 @@ class GameManager {
         return GameState.Running(lettersUsed, underscoreWord) // maybe add drawable
     }
 
-    fun getLivesL() : MutableList<String> {
+    fun getLives() : MutableList<String> {
         return livesList
     }
 
@@ -112,36 +106,36 @@ class GameManager {
             0 -> {
                 livesList.add(" ")
                 lives++
-                resultMSG = "Extra turn"
+                resultMSG = "Extra turn! \nYou gain a life!"
             }
             1 -> {
                 livesList.removeLast()
                 lives--
-                resultMSG = "Miss Turn"
+                resultMSG = "Miss Turn! \nYou loose a life!"
             }
             2 -> {
                 score = 0
-                resultMSG = "Bankrupt"
+                resultMSG = "Bankrupt!\nYou loose all points!"
             }
             3 -> {
                 scoreMultiplyer += 25
-                resultMSG = "25"
+                resultMSG = "25!\nEarn points on occurrences."
             }
             4 -> {
                 scoreMultiplyer += 50
-                resultMSG = "50"
+                resultMSG = "50!\nEarn points on occurrences."
             }
             5 -> {
                 scoreMultiplyer += 100
-                resultMSG = "100"
+                resultMSG = "100!\nEarn points on occurrences."
             }
             6 -> {
                 scoreMultiplyer += 1000
-                resultMSG = "1000"
+                resultMSG = "1000!\nEarn points on occurrences."
             }
             7 -> {
                 scoreMultiplyer += 1500
-                resultMSG = "1500"
+                resultMSG = "1500!\nEarn points on occurrences."
             }
         }
     }

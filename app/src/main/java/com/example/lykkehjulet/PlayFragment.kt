@@ -1,7 +1,6 @@
 package com.example.lykkehjulet
 
 
-import android.app.GameManager
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -13,7 +12,6 @@ import androidx.core.view.children
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.lykkehjulet.databinding.FragmentPlayBinding
-import kotlin.random.Random
 import java.util.*
 
 
@@ -44,7 +42,7 @@ class PlayFragment : Fragment() {
 
 
 
-        livesAdapter = LivesAdapter(gameManager.getLivesL())
+        livesAdapter = LivesAdapter(gameManager.getLives())
         binding.recyclerViewLives.adapter = livesAdapter
         val layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         binding.recyclerViewLives.layoutManager = layoutManager
@@ -103,7 +101,7 @@ class PlayFragment : Fragment() {
                     binding.spinButton.visibility = View.VISIBLE
                 }
             }
-            is GameState.Won -> showGameWon(gameState.wordToGuess) // TODO make this work
+            is GameState.Won -> showGameWon(gameState.score) // TODO make this work
         }
     }
 
@@ -111,7 +109,7 @@ class PlayFragment : Fragment() {
     private fun showGameLost(wordToGuess: String) {
         view?.let { Navigation.findNavController(it).navigate(R.id.action_playFragment_to_lostFragment) }
     }
-    private fun showGameWon(wordToGuess: String) {
+    private fun showGameWon(score: Int) {
         view?.let { Navigation.findNavController(it).navigate(R.id.action_playFragment_to_wonFragment) }
     }
 

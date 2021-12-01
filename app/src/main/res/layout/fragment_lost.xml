@@ -9,6 +9,7 @@
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
         android:layout_width="311dp"
         android:layout_height="182dp"
         android:layout_marginStart="51dp"
@@ -26,12 +27,18 @@
             android:id="@+id/lostTextView"
             android:layout_width="271dp"
             android:layout_height="117dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="35dp"
             android:text="You lost the game, would you like to try again?"
             android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="30sp"
-            tools:layout_editor_absoluteX="24dp"
-            tools:layout_editor_absoluteY="30dp" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.appcompat.widget.AppCompatButton

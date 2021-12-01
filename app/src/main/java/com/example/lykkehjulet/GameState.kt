@@ -7,5 +7,5 @@ sealed class GameState {
         //val drawable: Int maybe add this
         ): GameState()
     class Lost(val wordToGuess: String): GameState()
-    class Won(val wordToGuess: String): GameState()
+    class Won(val score: Int): GameState()
 }
