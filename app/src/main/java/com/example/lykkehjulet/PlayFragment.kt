@@ -92,7 +92,7 @@ class PlayFragment : Fragment() {
                 binding.wordTextview.text = gameState.underscoreWord // TODO make this work
                 binding.letterUsedTextView.text = "letters used: ${gameState.letterUsed}" // TODO make this work
                 binding.score.text = "Score: ${gameManager.score}"
-                binding.lives.text = "Lives: ${gameManager.getLives()}"
+                //binding.lives.text = "Lives: ${gameManager.getLives()}"
                 binding.result.text = gameManager.resultMSG
                 livesAdapter.notifyDataSetChanged()
                 if (gameManager.keyboard) {
