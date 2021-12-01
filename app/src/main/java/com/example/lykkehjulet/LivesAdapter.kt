@@ -7,15 +7,10 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 class LivesAdapter(private val lives: List<String>) : RecyclerView.Adapter<LivesAdapter.ViewHolder>() {
-    var livesCopy = lives
+    private var livesCopy = lives
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val textView: TextView
-
-
-        init {
-            textView = view.findViewById(R.id.HeartTextView)
-        }
+        val textView: TextView = view.findViewById(R.id.HeartTextView)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -32,7 +27,4 @@ class LivesAdapter(private val lives: List<String>) : RecyclerView.Adapter<Lives
         return lives.size
     }
 
-    fun setLives(lives : List<String>) {
-        livesCopy = lives
-    }
 }

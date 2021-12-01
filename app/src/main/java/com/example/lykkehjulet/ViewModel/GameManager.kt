@@ -1,102 +1,103 @@
-package com.example.lykkehjulet
+package com.example.lykkehjulet.ViewModel
 
-import android.view.View
-import androidx.recyclerview.widget.ConcatAdapter
-import com.example.lykkehjulet.databinding.FragmentPlayBinding
+import com.example.lykkehjulet.Category
 import java.lang.StringBuilder
 import kotlin.random.Random
 
 class GameManager {
 
     private var lettersUsed: String = ""
-    private lateinit var underscoreWord: String
-    //private lateinit var wordToGuess: String
+    private lateinit var hiddenWord: String
     var resultMSG: String = ""
-    private var lives: Int = 5
     var score: Int = 0
     var keyboard: Boolean = false
     private var scoreMultiplyer: Int = 0
-    private var livesList : MutableList<String> = mutableListOf(" "," "," "," "," ")
+    private var lives : MutableList<String> = mutableListOf(" "," "," "," "," ")
     var category = Category.values().random()
-    private var wordToGuess = category.words.random()
+    private var word = category.words.random()
 
 
 
-
-    fun startNewGame(): GameState{
+    // Used to start a new game
+    fun startNewGame(): GameState {
         lettersUsed = ""
-        lives = 5
 
-        //val randomIndex = Category.values().random().words.random().length
-        //val randomIndex = Random.nextInt(0, GameConstants.words.size)
-        //wordToGuess = GameConstants.words[randomIndex]
-        generateLetterBoxes(wordToGuess)
-        return getGameState() // TODO implement this
+        generateHiddenLetters(word)
+        return getGameState()
     }
 
-    private fun generateLetterBoxes(word: String) {
-        val sb = StringBuilder()
+    // generate the hidden letters represented by an underscore, spaces are represented by "-"
+    private fun generateHiddenLetters(word: String) {
+        val stringBuilder = StringBuilder()
         word.forEach { char ->
             if (char == '-') {
-                sb.append('-')
+                stringBuilder.append('-')
             } else {
-                sb.append("_")
+                stringBuilder.append("_")
             }
         }
-        underscoreWord = sb.toString()
+        hiddenWord = stringBuilder.toString()
     }
 
-    fun play(letter: Char): GameState {
+    /**
+     * Function for guessing on a letter, if guessed right add the letter to the hiddenWord, and add to the score.
+     * Else loose a life
+     */
+    fun guessOnLetter(letter: Char): GameState {
 
-        if (lettersUsed.contains(letter)) {
-            return GameState.Running(lettersUsed, underscoreWord)
-        }
 
         lettersUsed += "$letter"
         val indexes = mutableListOf<Int>()
 
-        wordToGuess.forEachIndexed{index, char ->
+        // add the letter to index if it occurs in the word
+        word.forEachIndexed{ index, char ->
             if (char.equals(letter, true)) {
                 indexes.add(index)
             }
         }
 
-        var finalUnderscoreWord = "" + underscoreWord
+        // add the letter to the finalHiddenWord, if it occurs in the word
+        var finalHiddenWord = "" + hiddenWord
         indexes.forEach {index ->
-            val sb = StringBuilder(finalUnderscoreWord).also { it.setCharAt(index, letter) }
-            finalUnderscoreWord = sb.toString()
+            val stringBuilder = StringBuilder(finalHiddenWord).also { it.setCharAt(index, letter) }
+            finalHiddenWord = stringBuilder.toString()
             score += scoreMultiplyer
         }
 
+        // if the guessed letter did not occur loose a life
         if (indexes.isEmpty()) {
-            livesList.removeLast()
-            lives--
+            lives.removeLast()
         }
 
-        underscoreWord = finalUnderscoreWord
+        // update the hidden word
+        hiddenWord = finalHiddenWord
         scoreMultiplyer = 0
 
         return getGameState()
     }
 
-
-    fun getGameState(): GameState{
-        if (underscoreWord.equals(wordToGuess, true)){
+    // Checks if the game has been won, lost or is still running
+    fun getGameState(): GameState {
+        if (hiddenWord.equals(word, true)){
             return GameState.Won(score)
         }
 
-        if (lives == 0) {
-            return GameState.Lost(wordToGuess)
+        if (lives.isEmpty()) {
+            return GameState.Lost(word)
         }
 
-        return GameState.Running(lettersUsed, underscoreWord) // maybe add drawable
+        return GameState.Running(lettersUsed, hiddenWord)
     }
 
     fun getLives() : MutableList<String> {
-        return livesList
+        return lives
     }
 
 
+    /**
+     * used for the spin wheel button
+     * draws a random index and execute the event. if it is bigger than 3 activate the keyboard, allowing to guess in a letter
+     */
     fun spinWheel() {
         val wheelIndex = Random.nextInt(0,7)
         if (wheelIndex >= 3) {
@@ -104,13 +105,11 @@ class GameManager {
         }
         when (wheelIndex) {
             0 -> {
-                livesList.add(" ")
-                lives++
+                lives.add(" ")
                 resultMSG = "Extra turn! \nYou gain a life!"
             }
             1 -> {
-                livesList.removeLast()
-                lives--
+                lives.removeLast()
                 resultMSG = "Miss Turn! \nYou loose a life!"
             }
             2 -> {

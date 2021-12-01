@@ -1,4 +1,4 @@
-package com.example.lykkehjulet
+package com.example.lykkehjulet.View
 
 
 import android.os.Bundle
@@ -11,6 +11,10 @@ import android.widget.TextView
 import androidx.core.view.children
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.lykkehjulet.ViewModel.GameManager
+import com.example.lykkehjulet.ViewModel.GameState
+import com.example.lykkehjulet.LivesAdapter
+import com.example.lykkehjulet.R
 import com.example.lykkehjulet.databinding.FragmentPlayBinding
 import java.util.*
 
@@ -23,12 +27,11 @@ import java.util.*
 class PlayFragment : Fragment() {
 
     private val gameManager = GameManager()
-
-
     private var _binding : FragmentPlayBinding? = null
     private val binding get() = _binding!!
-
     lateinit var livesAdapter: LivesAdapter
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,7 +44,7 @@ class PlayFragment : Fragment() {
         val view = binding.root
 
 
-
+        // Render the lives images, using recycler view
         livesAdapter = LivesAdapter(gameManager.getLives())
         binding.recyclerViewLives.adapter = livesAdapter
         val layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
@@ -49,20 +52,23 @@ class PlayFragment : Fragment() {
 
 
 
+        // Start a new game and update the PlayFragment
         val gameState = gameManager.startNewGame()
         notifyChange(gameState)
 
 
-
+        // write the the category name in the text view
         binding.categoryTextView.text = gameManager.category.name
 
 
-
-        // used for the keyboard
+        /**
+         * used for the keyboard
+         * render all the letters and set an onClickListener on them, and removes the clicked letter
+         */
         binding.lettersLayout.children.forEach { letterView ->
             if (letterView is TextView) {
                 letterView.setOnClickListener {
-                    val gameState = gameManager.play((letterView).text[0])
+                    val gameState = gameManager.guessOnLetter((letterView).text[0])
                     gameManager.keyboard = false
                     notifyChange(gameState)
                     letterView.visibility = View.GONE
@@ -70,6 +76,7 @@ class PlayFragment : Fragment() {
             }
         }
 
+        // Make the button spin the wheel
         binding.spinButton.setOnClickListener {
             gameManager.spinWheel()
             notifyChange(gameManager.getGameState())
@@ -80,20 +87,19 @@ class PlayFragment : Fragment() {
     }
 
 
-
-
-
+    /**
+     * Checks if the game has been won, lost or is still running. If running it will update the UI, else navigate to lost or won fragment
+     */
     private fun notifyChange(gameState: GameState) {
         when (gameState) {
-            is GameState.Lost -> showGameLost(gameState.wordToGuess) // TODO make this work
-            is GameState.Running -> {
-                binding.wordTextview.text = gameState.underscoreWord // TODO make this work
-                binding.letterUsedTextView.text = "letters used: ${gameState.letterUsed}" // TODO make this work
+            is GameState.Lost -> showGameLost()
+            is GameState.Running -> { // update playFragment
+                binding.wordTextview.text = gameState.underscoreWord
+                binding.letterUsedTextView.text = "letters used: ${gameState.letterUsed}"
                 binding.score.text = "Score: ${gameManager.score}"
-                //binding.lives.text = "Lives: ${gameManager.getLives()}"
                 binding.result.text = gameManager.resultMSG
-                livesAdapter.notifyDataSetChanged()
-                if (gameManager.keyboard) {
+                livesAdapter.notifyDataSetChanged() // update the rendered lives
+                if (gameManager.keyboard) { // Render ether the keyboard or the spin button
                     binding.lettersLayout.visibility = View.VISIBLE
                     binding.spinButton.visibility = View.INVISIBLE
                 } else {
@@ -101,15 +107,18 @@ class PlayFragment : Fragment() {
                     binding.spinButton.visibility = View.VISIBLE
                 }
             }
-            is GameState.Won -> showGameWon(gameState.score) // TODO make this work
+            is GameState.Won -> showGameWon()
         }
     }
 
 
-    private fun showGameLost(wordToGuess: String) {
+    // navigate to lostFragment
+    private fun showGameLost() {
         view?.let { Navigation.findNavController(it).navigate(R.id.action_playFragment_to_lostFragment) }
     }
-    private fun showGameWon(score: Int) {
+
+    // navigate to wonFragment
+    private fun showGameWon() {
         view?.let { Navigation.findNavController(it).navigate(R.id.action_playFragment_to_wonFragment) }
     }
 

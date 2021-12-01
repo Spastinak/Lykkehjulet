@@ -6,7 +6,7 @@
     app:startDestination="@id/playFragment">
     <fragment
         android:id="@+id/playFragment"
-        android:name="com.example.lykkehjulet.PlayFragment"
+        android:name="com.example.lykkehjulet.View.PlayFragment"
         android:label="fragment_play"
         tools:layout="@layout/fragment_play" >
         <action
@@ -18,7 +18,7 @@
     </fragment>
     <fragment
         android:id="@+id/secondFragment"
-        android:name="com.example.lykkehjulet.LostFragment"
+        android:name="com.example.lykkehjulet.View.LostFragment"
         android:label="fragment_second"
         tools:layout="@layout/fragment_lost" >
         <action
@@ -27,7 +27,7 @@
     </fragment>
     <fragment
         android:id="@+id/wonFragment"
-        android:name="com.example.lykkehjulet.WonFragment"
+        android:name="com.example.lykkehjulet.View.WonFragment"
         android:label="fragment_won"
         tools:layout="@layout/fragment_won" >
         <action
