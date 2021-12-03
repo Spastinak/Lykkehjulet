@@ -6,6 +6,10 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
+/**
+ * Adapter for the recycler view
+ * the recycler view represents the lives
+ */
 class LivesAdapter(private val lives: List<String>) : RecyclerView.Adapter<LivesAdapter.ViewHolder>() {
     private var livesCopy = lives
 

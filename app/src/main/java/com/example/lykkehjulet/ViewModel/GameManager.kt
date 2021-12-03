@@ -11,7 +11,7 @@ class GameManager {
     var resultMSG: String = ""
     var score: Int = 0
     var keyboard: Boolean = false
-    private var scoreMultiplyer: Int = 0
+    private var scoreMultiplier: Int = 0
     private var lives : MutableList<String> = mutableListOf(" "," "," "," "," ")
     var category = Category.values().random()
     private var word = category.words.random()
@@ -31,9 +31,9 @@ class GameManager {
         val stringBuilder = StringBuilder()
         word.forEach { char ->
             if (char == '-') {
-                stringBuilder.append('-')
+                stringBuilder.append('-') // represent spaces
             } else {
-                stringBuilder.append("_")
+                stringBuilder.append("_") // represent a letter
             }
         }
         hiddenWord = stringBuilder.toString()
@@ -61,7 +61,7 @@ class GameManager {
         indexes.forEach {index ->
             val stringBuilder = StringBuilder(finalHiddenWord).also { it.setCharAt(index, letter) }
             finalHiddenWord = stringBuilder.toString()
-            score += scoreMultiplyer
+            score += scoreMultiplier
         }
 
         // if the guessed letter did not occur loose a life
@@ -71,7 +71,7 @@ class GameManager {
 
         // update the hidden word
         hiddenWord = finalHiddenWord
-        scoreMultiplyer = 0
+        scoreMultiplier = 0
 
         return getGameState()
     }
@@ -99,7 +99,7 @@ class GameManager {
      * draws a random index and execute the event. if it is bigger than 3 activate the keyboard, allowing to guess in a letter
      */
     fun spinWheel() {
-        val wheelIndex = Random.nextInt(0,7)
+        val wheelIndex = Random.nextInt(0,8)
         if (wheelIndex >= 3) {
             keyboard = true
         }
@@ -117,24 +117,28 @@ class GameManager {
                 resultMSG = "Bankrupt!\nYou loose all points!"
             }
             3 -> {
-                scoreMultiplyer += 25
+                scoreMultiplier += 25
                 resultMSG = "25!\nEarn points on occurrences."
             }
             4 -> {
-                scoreMultiplyer += 50
+                scoreMultiplier += 50
                 resultMSG = "50!\nEarn points on occurrences."
             }
             5 -> {
-                scoreMultiplyer += 100
+                scoreMultiplier += 100
                 resultMSG = "100!\nEarn points on occurrences."
             }
             6 -> {
-                scoreMultiplyer += 1000
+                scoreMultiplier += 1000
                 resultMSG = "1000!\nEarn points on occurrences."
             }
             7 -> {
-                scoreMultiplyer += 1500
+                scoreMultiplier += 1500
                 resultMSG = "1500!\nEarn points on occurrences."
+            }
+            8 -> {
+                scoreMultiplier += 2000
+                resultMSG = "2000!\nEarn points on occurrences."
             }
         }
     }

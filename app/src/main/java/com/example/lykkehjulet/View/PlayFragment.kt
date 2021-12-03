@@ -69,7 +69,7 @@ class PlayFragment : Fragment() {
             if (letterView is TextView) {
                 letterView.setOnClickListener {
                     val gameState = gameManager.guessOnLetter((letterView).text[0])
-                    gameManager.keyboard = false
+                    gameManager.keyboard = false // removes the keyboard
                     notifyChange(gameState)
                     letterView.visibility = View.GONE
                 }
