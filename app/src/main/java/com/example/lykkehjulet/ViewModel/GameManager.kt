@@ -26,7 +26,10 @@ class GameManager {
         return getGameState()
     }
 
-    // generate the hidden letters represented by an underscore, spaces are represented by "-"
+    /**
+     * generate the hidden letters represented by an underscore, spaces are represented by "-"
+     * gotten from: https://github.com/usmaanz/Hangman/blob/master/app/src/main/java/com/usmaan/hangman/GameManager.kt
+     */
     private fun generateHiddenLetters(word: String) {
         val stringBuilder = StringBuilder()
         word.forEach { char ->
@@ -42,6 +45,7 @@ class GameManager {
     /**
      * Function for guessing on a letter, if guessed right add the letter to the hiddenWord, and add to the score.
      * Else loose a life
+     * Gotten from: https://github.com/usmaanz/Hangman/blob/master/app/src/main/java/com/usmaan/hangman/GameManager.kt
      */
     fun guessOnLetter(letter: Char): GameState {
 
@@ -79,11 +83,11 @@ class GameManager {
     // Checks if the game has been won, lost or is still running
     fun getGameState(): GameState {
         if (hiddenWord.equals(word, true)){
-            return GameState.Won(score)
+            return GameState.Won
         }
 
         if (lives.isEmpty()) {
-            return GameState.Lost(word)
+            return GameState.Lost
         }
 
         return GameState.Running(lettersUsed, hiddenWord)

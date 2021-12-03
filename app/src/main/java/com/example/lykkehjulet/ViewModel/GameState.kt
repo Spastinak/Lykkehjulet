@@ -5,6 +5,6 @@ sealed class GameState {
         val letterUsed: String,
         val underscoreWord: String,
         ): GameState()
-    class Lost(val word: String): GameState()
-    class Won(val score: Int): GameState()
+    object Lost : GameState()
+    object Won : GameState()
 }
